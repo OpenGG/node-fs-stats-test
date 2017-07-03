@@ -7,20 +7,21 @@ var randomFilename = function () {
   return filename + '.txt';
 };
 
-var fd;
-
-afterEach(function () {
-  fs.closeSync(fd);
-});
-
-for (var i = 0; i < 500; ++i) {
+for (var i = 0; i < 1000; ++i) {
   it('futimes and lstatSync', function (done) {
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
-    fd = fs.openSync(filename, 'w+');
+    var fd = fs.openSync(filename, 'w+');
 
     fs.futimes(fd, now, now, function (err) {
+      try {
+        fs.closeSync(fd);
+      } catch (e) {
+        done(e);
+        return;
+      }
+
       if (err) {
         done(err);
         return;
@@ -42,9 +43,10 @@ for (var i = 0; i < 500; ++i) {
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
-    fd = fs.openSync(filename, 'w+');
+    var fd = fs.openSync(filename, 'w+');
 
     fs.futimesSync(fd, now, now);
+    fs.closeSync(fd);
 
     var mtime = fs.lstatSync(filename).mtime.getTime();
 
@@ -55,7 +57,8 @@ for (var i = 0; i < 500; ++i) {
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
-    fd = fs.openSync(filename, 'w+');
+    var fd = fs.openSync(filename, 'w+');
+    fs.closeSync(fd);
 
     fs.utimes(filename, now, now, function (err) {
       if (err) {
@@ -79,7 +82,8 @@ for (var i = 0; i < 500; ++i) {
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
-    fd = fs.openSync(filename, 'w+');
+    var fd = fs.openSync(filename, 'w+');
+    fs.closeSync(fd);
 
     fs.utimesSync(filename, now, now);
 
