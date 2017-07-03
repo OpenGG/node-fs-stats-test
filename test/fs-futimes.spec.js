@@ -7,8 +7,15 @@ var randomFilename = function () {
   return filename + '.txt';
 };
 
+var TEST_FN = process.env.TEST_FN;
+
 for (var i = 0; i < 1000; ++i) {
-  it('futimes and lstatSync', function (done) {
+  it('fs.futimes and lstatSync', function (done) {
+    if (TEST_FN && TEST_FN !== 'futimes') {
+      this.skip();
+      return;
+    }
+
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
@@ -39,7 +46,12 @@ for (var i = 0; i < 1000; ++i) {
     });
   });
 
-  it('futimesSync and lstatSync', function () {
+  it('fs.futimesSync and lstatSync', function () {
+    if (TEST_FN && TEST_FN !== 'futimes') {
+      this.skip();
+      return;
+    }
+
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
@@ -53,7 +65,12 @@ for (var i = 0; i < 1000; ++i) {
     assert(mtime === time, 'time not equal:' + time + '-' + mtime);
   });
 
-  it('utimes and lstatSync', function (done) {
+  it('fs.utimes and lstatSync', function (done) {
+    if (TEST_FN && TEST_FN !== 'utimes') {
+      this.skip();
+      return;
+    }
+
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
@@ -78,7 +95,12 @@ for (var i = 0; i < 1000; ++i) {
     });
   });
 
-  it('utimesSync and lstatSync', function () {
+  it('fs.utimesSync and lstatSync', function () {
+    if (TEST_FN && TEST_FN !== 'utimes') {
+      this.skip();
+      return;
+    }
+
     var now = new Date();
     var time = now.getTime();
     var filename = randomFilename();
